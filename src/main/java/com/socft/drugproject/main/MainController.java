@@ -19,7 +19,6 @@ public class MainController {
     public String index(HttpServletResponse response, HttpServletRequest request) throws Exception {
 
         List<Map> result = this.mainService.getTest();
-        System.out.println(result);
 
         return "/main/main";
     }
