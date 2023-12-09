@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Login</title>
+</head>
+<body>
+<form th:action="@{/auth}" method="post">
+  <!-- CSRF Token -->
+  <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+  <h2>로그인</h2>
+  <div>
+    <input type="text" name="email" placeholder="Email"/>
+  </div>
+  <div>
+    <input type="password" name="password" placeholder="Password"/>
+  </div>
+
+  <button type="submit">로그인</button>
+  <button type="button" th:onclick="|location.href='signup'|">회원가입</button>
+</form>
+</body>
+</html>

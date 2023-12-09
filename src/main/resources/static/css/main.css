@@ -1,0 +1,44 @@
+header {
+    position: relative;
+    padding: 0 10px;
+    background: #3a3a3a;
+    color: #fff;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #000;
+    width: 100%;
+}
+body * {
+    box-sizing: border-box;
+}
+
+header.index h1 {
+    width: max-content;
+}
+
+header.index .login-btn {
+    width: max-content;
+    height: 60px;
+}
+
+header.index .login-btn ul {
+    text-align: right;
+    height: 100%;
+    font-size: 0;
+}
+
+header.index .login-btn ul li {
+    display: inline-block;
+    height: 100%;
+}
+
+header.index .login-btn ul li a {
+    display: flex;
+    font-size: 17px;
+    color: #fff;
+    padding: 0 30px;
+    transition: none;
+    height: 100%;
+    align-items: center;
+}

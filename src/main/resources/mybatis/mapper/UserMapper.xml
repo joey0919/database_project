@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.socft.drugproject.login.UserMapper">
+
+    <select id="getUserList" resultType="com.socft.drugproject.login.UserVo">
+        SELECT *
+        FROM User
+    </select>
+
+    <!-- 회원가입 -->
+    <insert id="insertUser">
+        INSERT INTO User
+            (name, username, email, password, address, phone, website, company)
+        VALUES
+            (#{name}, #{username}, #{email}, #{password}, #{address}, #{phone}, #{website}, #{company})
+    </insert>
+
+    <!-- 회원 정보 가져오기 -->
+    <select id="getUserByEmail" resultType="com.socft.drugproject.login.UserVo">
+        SELECT *
+        FROM User
+        WHERE email = #{email}
+    </select>
+
+    <select id="getUserById" resultType="com.socft.drugproject.login.UserVo">
+        SELECT *
+        FROM User
+        WHERE id = #{id}
+    </select>
+
+    <!-- 회원정보 수정 -->
+    <update id="updateUser">
+        UPDATE User
+        SET name = #{name},
+            username = #{username},
+            email = #{email},
+            password = #{password},
+            address = #{address},
+            phone = #{phone},
+            website = #{website},
+            company = #{company}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 탈퇴 -->
+    <delete id="deleteUser">
+        DELETE
+        FROM User
+        WHERE id = #{id}
+    </delete>
+</mapper>

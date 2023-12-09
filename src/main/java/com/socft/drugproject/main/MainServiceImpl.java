@@ -17,4 +17,9 @@ public class MainServiceImpl implements MainService{
     public List<Map> getTest() throws Exception {
         return this.mainDao.getTest();
     }
+
+    @Override
+    public List<MenuVo> getMenuList(String userType) throws Exception {
+        return this.mainDao.getMenuList(userType);
+    }
 }

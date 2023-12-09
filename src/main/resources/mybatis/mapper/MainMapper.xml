@@ -5,9 +5,23 @@
 
 <mapper namespace="com.socft.drugproject.main.MainDao">
 
-
     <select id="getTest" resultType="map">
         /*getTest*/
         SELECT * FROM drug
+    </select>
+
+    <select id="getMenuList" resultType="com.socft.drugproject.main.MenuVo">
+        SELECT id,
+               menu_nm as menuNm,
+               expert_access as expertAccess,
+               user_access as userAccess
+        FROM menu
+        WHERE 1=1
+        <if test="userType == user">
+            AND user_access = 'Y'
+        </if>
+        <if test="userType == expert">
+            AND expert_access = 'Y'
+        </if>
     </select>
 </mapper>

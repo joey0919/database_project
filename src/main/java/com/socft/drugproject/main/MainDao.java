@@ -12,5 +12,6 @@ public interface MainDao {
 
     List<Map> getTest();
 
+    List<MenuVo> getMenuList(String userType);
 
 }

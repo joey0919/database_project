@@ -6,4 +6,6 @@ import java.util.Map;
 public interface MainService {
 
     List<Map> getTest() throws Exception;
+
+    List<MenuVo> getMenuList(String userType) throws Exception;
 }
