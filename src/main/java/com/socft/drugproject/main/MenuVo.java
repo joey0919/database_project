@@ -8,5 +8,6 @@ public class MenuVo {
     private String menuNm;
     private String expertAccess;
     private String userAccess;
+    private String url;
 
 }

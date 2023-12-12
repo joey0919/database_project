@@ -11,17 +11,87 @@
     </select>
 
     <select id="getMenuList" resultType="com.socft.drugproject.main.MenuVo">
+        <!-- getMenuList -->
         SELECT id,
-               menu_nm as menuNm,
-               expert_access as expertAccess,
-               user_access as userAccess
+        menu_nm as menuNm,
+        expert_access as expertAccess,
+        user_access as userAccess,
+        url
         FROM menu
         WHERE 1=1
-        <if test="userType == user">
+        <if test="userType.equals('user')">
             AND user_access = 'Y'
         </if>
-        <if test="userType == expert">
+        <if test="userType.equals('expert')">
             AND expert_access = 'Y'
         </if>
     </select>
+
+    <select id="getDrugInfo" resultType="com.socft.drugproject.main.DrugVo">
+        /*getDrugInfo*/
+        SELECT drug_id as drugId,
+               drug_name as drugName,
+               manufacturer,
+               registration_date as registrationDate,
+               modification_date as modificationDate
+        FROM drug
+    </select>
+
+    <select id="getDrugDetail" resultType="com.socft.drugproject.main.SideEffectVo">
+        /*getDrugDetail*/
+        SELECT side_effect_id as sideEffectId,
+               drug_id as drugId,
+               description
+        FROM side_effect
+        WHERE drug_id = ${drugId}
+        LIMIT 1
+    </select>
+
+    <select id="getInteraction" resultType="com.socft.drugproject.main.InteractionVo">
+        SELECT interaction_id as interactionId,
+               drug1_id as drug1Id,
+               drug2_id as drug2Id,
+               interaction_content as interactionContent,
+               registration_date as registrationDate
+        FROM interaction
+        WHERE drug1_id = ${drug1} and drug2_id = ${drug2}
+        LIMIT 1
+    </select>
+
+    <update id="updateUserType">
+        UPDATE user
+        SET user_type = 'expert'
+        WHERE id = ${id}
+    </update>
+
+    <insert id="insertDrug">
+        INSERT INTO drug
+        (drug_name, manufacturer, registration_date, modification_date)
+        VALUES
+        (#{drugName}, #{manufacturer}, now(), now());
+    </insert>
+
+    <insert id="insertSideEffect">
+        INSERT INTO side_effect (drug_id, description)
+        SELECT MAX(drug_id), #{description} FROM drug
+    </insert>
+
+    <update id="updateDrug">
+        UPDATE drug
+        SET drug_name = #{drugName},
+            manufacturer = #{manufacturer},
+            modification_date = now()
+        WHERE drug_id = ${drugId}
+    </update>
+
+    <update id="updateSideEffect">
+        UPDATE side_effect
+        SET description = #{description}
+        WHERE drug_id = ${drugId}
+    </update>
+
+    <delete id="deleteDrug">
+        DELETE FROM drug
+        WHERE drug_id = ${drugId}
+    </delete>
 </mapper>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:insert="/layout/header :: f-header"></th:block>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<h1>상호작용분석</h1>
+
+<table>
+  <tr>
+    <th scope="col" >선택</th>
+    <th scope="col">약물번호</td>
+    <th scope="col">약물이름</td>
+    <th scope="col">제조사</td>
+  </tr>
+  <tr class="popup-trigger" th:each="drug : ${drug}">
+    <td><input type="checkbox" class="checkbox-trigger" th:data-drugid="${drug.drugId}"></td>
+    <td th:text="${drug.drugId}"></td>
+    <td th:text="${drug.drugName}"></td>
+    <td th:text="${drug.manufacturer}"></td>
+  </tr>
+</table>
+
+<button onclick="interaction()">분석</button>
+
+<!-- 상호작용 팝업 -->
+<div id="popup" class="popup">
+  <span id="close" style="cursor: pointer;">&times;</span>
+  <!-- Add additional content for the popup here -->
+  <p id="popupContent"></p>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // JavaScript code to handle the checkboxes
+  var checkedCheckboxes = [];
+  var drugs = [];
+  document.addEventListener('DOMContentLoaded', function () {
+    var checkboxes = document.querySelectorAll('.checkbox-trigger');
+
+    checkboxes.forEach(function (checkbox) {
+      checkbox.addEventListener('change', function (evt) {
+        if (this.checked) {
+          // If checkbox is checked, add to the array
+          checkedCheckboxes.push(this);
+          drugs.push(evt.target.dataset.drugid);
+          if (checkedCheckboxes.length > 2) {
+            // If more than 2 checkboxes are checked, uncheck the last one and show alert
+            checkedCheckboxes.shift().checked = false;
+
+            alert('최대 2개의 약물만 선택할 수 있습니다.');
+          }
+        } else {
+          // If checkbox is unchecked, remove from the array
+          checkedCheckboxes = checkedCheckboxes.filter(function (item) {
+            return item !== checkbox;
+          });
+        }
+      });
+    });
+  });
+
+  function interaction() {
+    var popup = document.getElementById('popup');
+    var popupContent = document.getElementById('popupContent');
+    var closeBtn = document.getElementById('close');
+    var checkedDrugIds = [];
+    var checkboxes = document.querySelectorAll('.checkbox-trigger:checked');
+
+    checkboxes.forEach(function (checkbox) {
+      var drugId = checkbox.getAttribute('data-drugid');
+      checkedDrugIds.push(drugId);
+    });
+
+    var data = checkedDrugIds.map(function(str) {
+      return parseInt(str, 10);
+    });
+
+    data.sort(function(a, b) {
+      return a - b;
+    });
+    console.log(data);
+    $.ajax({
+      type: 'get',
+      url: '/ajax/interactionProcess',
+      dataType: 'json',
+      data: {drug1: data[0],
+            drug2: data[1]},
+      success: function(response) {
+        console.log(response);
+        var context = '<table><th>약물번호1</th>';
+        context += '<th>약물번호2</th>';
+        context += '<th>상호작용</th>';
+        context += '<tr>'
+        context += '<td>' + response.interaction.drug1Id + '</td>';
+        context += '<td>' + response.interaction.drug2Id + '</td>';
+        context += '<td>' + response.interaction.interactionContent + '</td></tr></table>'
+
+        popupContent.innerHTML = context;
+        popup.style.display = 'block';
+      },
+      error: function(error) {
+        console.error('에러 발생: ' + error);
+      }
+    });
+    closeBtn.addEventListener('click', function () {
+      popup.style.display = 'none';
+    });
+
+    // Close the popup if the user clicks outside of it
+    window.addEventListener('click', function (event) {
+      if (event.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
+
+  }
+
+
+
+</script>
+
+</body>
+</html>

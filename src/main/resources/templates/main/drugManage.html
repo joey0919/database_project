@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:insert="/layout/header :: f-header"></th:block>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+
+<h1>약물정보</h1>
+
+
+<table>
+  <tr>
+    <th scope="col">약물번호</td>
+    <th scope="col">약물이름</td>
+    <th scope="col">제조사</td>
+  </tr>
+  <tr class="popup-trigger" th:each="drug : ${drug}">
+    <td th:text="${drug.drugId}"></td>
+    <td th:text="${drug.drugName}"></td>
+    <td th:text="${drug.manufacturer}"></td>
+  </tr>
+</table>
+
+<form th:action="@{/main/updateDrug}" method="post">
+  <input type="hidden" id="drugId" name="drugId">
+  <label for="drugName">약물이름:</label>
+  <input type="text" id="drugName" name="drugName"/>
+
+  <label for="manufacturer">제조사:</label>
+  <input type="text" id="manufacturer" name="manufacturer"/>
+
+  <label for="description">부작용:</label>
+  <input type="text" id="description" name="description"/>
+
+  <button type="submit">약물 수정</button>
+</form>
+
+<form th:action="@{/main/insertDrug}" method="post">
+  <label for="drugName">약물이름:</label>
+  <input type="text" name="drugName"/>
+
+  <label for="manufacturer">제조사:</label>
+  <input type="text" name="manufacturer"/>
+
+  <label for="description">부작용:</label>
+  <input type="text" name="description"/>
+
+  <button type="submit">약물 등록</button>
+</form>
+
+
+
+<!-- 약물 팝업 -->
+<div id="popup" class="popup">
+  <span id="close" style="cursor: pointer;">&times;</span>
+  <!-- Add additional content for the popup here -->
+  <p id="popupContent"></p>
+</div>
+
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // JavaScript code to handle the popup
+  document.addEventListener('DOMContentLoaded', function () {
+    var popup = document.getElementById('popup');
+    var popupContent = document.getElementById('popupContent');
+    var closeBtn = document.getElementById('close');
+
+    // Attach click event to each element with the class 'popup-trigger'
+    var popupTriggers = document.getElementsByClassName('popup-trigger');
+    for (var i = 0; i < popupTriggers.length; i++) {
+      popupTriggers[i].addEventListener('click', function () {
+        // Set the content of the popup (modify as needed)
+        var drugId = this.querySelector('td:first-child').innerText;
+        $('#drugId').val(drugId);
+        $('#drugName').val(this.querySelector('td:nth-child(2)').innerText);
+        $('#manufacturer').val(this.querySelector('td:nth-child(3)').innerText);
+        //약물 상세정보 가져오기
+
+        var data = {
+          drugId: drugId
+        }
+        $.ajax({
+          type: 'get',
+          url: '/ajax/getDrugDetail',
+          dataType: 'json',
+          data: data,
+          success: function(response) {
+            $('#description').val(response.drugDetail.description);
+            var context = '<table><th>약물번호</th>';
+            context += '<th>부작용</th>'
+            context += '<tr>'
+            context += '<td>' + drugId + '</td>';
+            context += '<td>' + response.drugDetail.description + '</td></tr></table>';
+            context += '<form action="/main/deleteDrug" method="get">';
+            context += '<input type="hidden" name="drugId" value="' + drugId + '">'
+            context += '<button type="submit">약물삭제</button>';
+            context += '</form>';
+            popupContent.innerHTML = context;
+          },
+          error: function(error) {
+            console.error('에러 발생: ' + error);
+          }
+        });
+
+        // Display the popup
+        popup.style.display = 'block';
+      });
+    }
+
+    // Close the popup when the close button is clicked
+    closeBtn.addEventListener('click', function () {
+      popup.style.display = 'none';
+    });
+
+    // Close the popup if the user clicks outside of it
+    window.addEventListener('click', function (event) {
+      if (event.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

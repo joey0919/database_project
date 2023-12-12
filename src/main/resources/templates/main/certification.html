@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:insert="/layout/header :: f-header"></th:block>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<h1>전문직인증</h1>
+
+<form th:action="@{/main/updateUserType}" method="post">
+  <p>
+    <label for="avatar">전문가 인증 파일:</label>
+    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
+  </p>
+
+
+  <button type="submit">전문가 인증 요청</button>
+</form>
+
+
+</body>
+</html>

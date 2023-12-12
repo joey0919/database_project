@@ -26,8 +26,16 @@
     </select>
 
     <select id="getUserById" resultType="com.socft.drugproject.login.UserVo">
-        SELECT *
-        FROM User
+        SELECT name,
+               username,
+               email,
+               password,
+               address,
+               phone,
+               website,
+               company,
+               user_type as userType
+        FROM user
         WHERE id = #{id}
     </select>
 

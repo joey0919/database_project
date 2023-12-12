@@ -3,7 +3,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link href="css/main.css" rel="stylesheet">
+  <link th:href="@{/css/main.css}" rel="stylesheet">
 
   <title>Drug</title>
 
@@ -13,9 +13,15 @@
       <a>연세대학교 약물관리시스템</a>
     </h1>
     <div class="login-btn pc">
-      <ul th:each="menu : ${menu}">
+      <ul>
+        <li th:each="menu : ${menu}">
+          <a th:href="${menu.url}" th:text="${menu.menuNm}"></a>
+        </li>
         <li>
-          <a th:text="${menu.menuNm}"></a>
+          <form th:action="@{/logout}" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit">로그아웃</button>
+          </form>
         </li>
       </ul>
     </div>
