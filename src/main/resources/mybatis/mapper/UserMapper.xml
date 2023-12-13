@@ -5,6 +5,7 @@
 
 <mapper namespace="com.socft.drugproject.login.UserMapper">
 
+    <!--사용자 정보 모두 가져오기-->
     <select id="getUserList" resultType="com.socft.drugproject.login.UserVo">
         SELECT *
         FROM User
@@ -25,6 +26,7 @@
         WHERE email = #{email}
     </select>
 
+    <!-- 회원 정보 상세조회(로그인 관리)-->
     <select id="getUserById" resultType="com.socft.drugproject.login.UserVo">
         SELECT name,
                username,

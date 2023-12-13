@@ -3,7 +3,7 @@ package com.socft.drugproject.login;
 import lombok.Data;
 
 @Data
-public class UserVo {
+public class UserVo { //사용자 Data
     private Long id;
     private String name;
     private String username;

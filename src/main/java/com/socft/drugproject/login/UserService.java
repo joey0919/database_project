@@ -14,11 +14,11 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public List<UserVo> getUserList() {
+    public List<UserVo> getUserList() { // 사용자 리스트 추출
         return userMapper.getUserList();
     }
-
-    public UserVo getUserById(Long id) {
+    
+    public UserVo getUserById(Long id) { //사용자 정보 조회
         return userMapper.getUserById(id);
     }
 

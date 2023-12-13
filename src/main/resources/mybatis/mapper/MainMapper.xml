@@ -5,11 +5,7 @@
 
 <mapper namespace="com.socft.drugproject.main.MainDao">
 
-    <select id="getTest" resultType="map">
-        /*getTest*/
-        SELECT * FROM drug
-    </select>
-
+    <!--메뉴 목록 리스트 조회-->
     <select id="getMenuList" resultType="com.socft.drugproject.main.MenuVo">
         <!-- getMenuList -->
         SELECT id,
@@ -27,6 +23,7 @@
         </if>
     </select>
 
+    <!--약물 정보 조회-->
     <select id="getDrugInfo" resultType="com.socft.drugproject.main.DrugVo">
         /*getDrugInfo*/
         SELECT drug_id as drugId,
@@ -37,6 +34,7 @@
         FROM drug
     </select>
 
+    <!--약물 상세조회-->
     <select id="getDrugDetail" resultType="com.socft.drugproject.main.SideEffectVo">
         /*getDrugDetail*/
         SELECT side_effect_id as sideEffectId,
@@ -47,6 +45,7 @@
         LIMIT 1
     </select>
 
+    <!--약물 상호작용 조회-->
     <select id="getInteraction" resultType="com.socft.drugproject.main.InteractionVo">
         SELECT interaction_id as interactionId,
                drug1_id as drug1Id,
@@ -58,12 +57,14 @@
         LIMIT 1
     </select>
 
+    <!--사용자 권한: 일반사용자 -> 전문직 변경-->
     <update id="updateUserType">
         UPDATE user
         SET user_type = 'expert'
         WHERE id = ${id}
     </update>
 
+    <!--약물 추가-->
     <insert id="insertDrug">
         INSERT INTO drug
         (drug_name, manufacturer, registration_date, modification_date)
@@ -71,11 +72,13 @@
         (#{drugName}, #{manufacturer}, now(), now());
     </insert>
 
+    <!--약물 부작용 추가-->
     <insert id="insertSideEffect">
         INSERT INTO side_effect (drug_id, description)
         SELECT MAX(drug_id), #{description} FROM drug
     </insert>
 
+    <!--약물 수정-->
     <update id="updateDrug">
         UPDATE drug
         SET drug_name = #{drugName},
@@ -84,14 +87,23 @@
         WHERE drug_id = ${drugId}
     </update>
 
+    <!--약물 부작용 수정-->
     <update id="updateSideEffect">
         UPDATE side_effect
         SET description = #{description}
         WHERE drug_id = ${drugId}
     </update>
 
+    <!--약물 삭제-->
     <delete id="deleteDrug">
         DELETE FROM drug
         WHERE drug_id = ${drugId}
     </delete>
+
+    <!--사용자 -> 피드백 추가-->
+    <insert id="insertFeedback">
+        INSERT INTO feedback
+        (user_id, feed_back)
+        VALUES (#{userId}, #{feedback})
+    </insert>
 </mapper>
